@@ -572,7 +572,9 @@ class MarkdownMermaidWidget {
             
             // Set the processed content
             this.elements.contentDisplay.innerHTML = processedContent;
-            
+
+            this.openLinksInNewTab(this.elements.contentDisplay);
+
         } catch (error) {
             console.error('Error rendering content:', error);
             this.elements.contentDisplay.innerHTML = `
@@ -716,6 +718,19 @@ class MarkdownMermaidWidget {
         }
     }
     
+    /**
+     * Make links (Markdown and Mermaid SVG) open in a new browser tab
+     * instead of navigating inside the widget iframe
+     */
+    openLinksInNewTab(container) {
+        container.querySelectorAll('a').forEach(link => {
+            const href = link.getAttribute('href') || link.getAttribute('xlink:href');
+            if (!href || href.startsWith('#')) return;
+            link.setAttribute('target', '_blank');
+            link.setAttribute('rel', 'noopener noreferrer');
+        });
+    }
+
     /**
      * Escape HTML characters
      */
